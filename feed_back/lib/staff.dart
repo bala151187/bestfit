@@ -8,28 +8,31 @@ class Staff extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Container(
-      width: double.infinity,
-      margin: EdgeInsets.all(10),
-      child: Column(
-        children: <Widget>[
-          Text("Enter the Staff Name",
-              style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: myController,
+    return Column(
+     mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+      Container(
+        width: double.infinity,
+        margin: EdgeInsets.all(10),
+        child: Column(
+          children: <Widget>[
+            Text("Enter the Staff Name",
+                style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                controller: myController,
+              ),
             ),
-          ),
-          RaisedButton(
-            child: Text("OK"),
-            onPressed: (() => getStaffName(myController.text)),
-            color: Colors.blue,
-          )
-        ],
-      ),
-      alignment: Alignment(0.0, 0.0),
-    ));
+            RaisedButton(
+              child: Text("OK"),
+              onPressed: (() => getStaffName(myController.text)),
+              color: Colors.blue,
+            )
+          ],
+        ),
+        alignment: Alignment(0.0, 0.0),
+      )
+    ]);
   }
 }
