@@ -4,13 +4,12 @@ A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is constructed without database
 
-A few resources to get you started if this is your first Flutter project:
+You can add transaction 
+You can delete transaction
+You can see weekly spending in cool chart!
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+<img width="413" alt="Screen Shot 2020-01-23 at 5 02 09 PM" src="https://user-images.githubusercontent.com/5027627/73029180-16699c00-3e05-11ea-8c55-a152ce3a7c3f.png">
+<img width="406" alt="Screen Shot 2020-01-23 at 5 04 26 PM" src="https://user-images.githubusercontent.com/5027627/73029181-16699c00-3e05-11ea-9031-b0662da48054.png">
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
