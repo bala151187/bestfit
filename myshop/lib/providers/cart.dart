@@ -61,11 +61,13 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 
+//This is to clear cart screen after clicking ordernow button
   void clear() {
     _items = {};
     notifyListeners();
   }
 
+//This is for UNDO action on the product_overview screen
   void removeSingleItem(String productId) {
     if (!_items.containsKey(productId)) {
       return;

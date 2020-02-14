@@ -6,6 +6,7 @@ import '../widgets/badge.dart';
 import '../widgets/app_drawer.dart';
 
 import '../providers/cart.dart';
+import '../providers/products_provider.dart';
 
 import '../screens/cart_screen.dart';
 
@@ -20,6 +21,30 @@ class ProductOverviewScreen extends StatefulWidget {
 }
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
+  var _isInit = true;
+  var _isLoading = false;
+
+  @override
+  void initState() {
+    // Provider.of<ProductsProvider>(context).getProducts();
+    // Future.delayed(Duration.zero).then((_){});
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      _isLoading = true;
+      Provider.of<ProductsProvider>(context).getProducts().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   var _showOnlyFavorites = false;
   @override
   Widget build(BuildContext context) {
@@ -57,18 +82,22 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
               value: cart.itemCount.toString(),
             ),
             child: IconButton(
-                icon: Icon(
-                  Icons.shopping_cart,
-                ),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(CartScreen.routeName);
-                },
+              icon: Icon(
+                Icons.shopping_cart,
               ),
+              onPressed: () {
+                Navigator.of(context).pushNamed(CartScreen.routeName);
+              },
+            ),
           )
         ],
       ),
       drawer: AppDrawer(),
-      body: ProductsGrid(_showOnlyFavorites),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductsGrid(_showOnlyFavorites),
     );
   }
 }
