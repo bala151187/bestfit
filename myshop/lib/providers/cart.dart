@@ -38,6 +38,31 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 
+// This method to sum up all product price
+  void totalPriceOfAllProducts(String productId, double price, int itemCount , String operation) {
+    if (_items.containsKey(productId) && operation == "add") {
+      _items.update(
+          productId,
+          (existingItem) => CartItem(
+                id: existingItem.id,
+                title: existingItem.title,
+                price: existingItem.price,
+                quantity: existingItem.quantity + 1,
+              ));
+      notifyListeners();
+    }else{
+      _items.update(
+          productId,
+          (existingItem) => CartItem(
+                id: existingItem.id,
+                title: existingItem.title,
+                price: existingItem.price,
+                quantity: existingItem.quantity - 1,
+              ));
+      notifyListeners();
+    }
+  }
+
   void addItem(String productId, double price, String title) {
     if (_items.containsKey(productId)) {
       _items.update(
@@ -46,7 +71,7 @@ class Cart with ChangeNotifier {
                 id: existingItem.id,
                 title: existingItem.title,
                 price: existingItem.price,
-                quantity: existingItem.quantity + 1,
+                quantity: existingItem.quantity,
               ));
     } else {
       _items.putIfAbsent(
@@ -81,7 +106,7 @@ class Cart with ChangeNotifier {
                 price: existingCartItem.price,
                 quantity: existingCartItem.quantity - 1,
               ));
-    }else{
+    } else {
       _items.remove(productId);
     }
     notifyListeners();

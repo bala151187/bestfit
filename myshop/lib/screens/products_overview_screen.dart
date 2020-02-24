@@ -7,6 +7,8 @@ import '../widgets/app_drawer.dart';
 
 import '../providers/cart.dart';
 import '../providers/products_provider.dart';
+import '../providers/auth.dart';
+
 
 import '../screens/cart_screen.dart';
 
@@ -48,9 +50,10 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   var _showOnlyFavorites = false;
   @override
   Widget build(BuildContext context) {
+    final authData = Provider.of<Auth>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('JKShop'),
+        title: Text('Welcome!'),
         actions: <Widget>[
           PopupMenuButton(
             onSelected: (filterOptions selectedValue) {

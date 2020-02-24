@@ -3,14 +3,21 @@ import 'package:provider/provider.dart';
 
 import '../providers/cart.dart' show Cart;
 import '../providers/orders.dart';
+import '../providers/address.dart';
 
 import '../widgets/cart_item.dart';
 
 import '../screens/orders_screen.dart';
+import '../screens/edit_address_screen.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   static const routeName = '/cart';
 
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
@@ -37,7 +44,7 @@ class CartScreen extends StatelessWidget {
                   ),
                   Chip(
                     label: Text(
-                      '\$${cart.totalAmount..toStringAsFixed(2)}',
+                      '\$${cart.totalAmount.toStringAsFixed(2)}',
                       style: TextStyle(
                         color: Theme.of(context).primaryTextTheme.title.color,
                       ),
@@ -99,10 +106,17 @@ class _OrderButtonState extends State<OrderButton> {
                   widget.cart.items.values.toList(),
                   widget.cart.totalAmount,
                 );
+                final intialAddress = await Provider.of<Address>(context, listen: false)
+                    .getAddress();
                 setState(() {
                   _isLoading = false;
                 });
-                Navigator.of(context).pushNamed(OrdersScreen.routeName);
+                print(intialAddress);
+                 if (intialAddress == null) {
+                   Navigator.of(context).pushNamed(EditAddressScreen.routeName);
+                 } else {
+                  Navigator.of(context).pushNamed(OrdersScreen.routeName);
+               }
               }
               widget.cart.clear();
             },

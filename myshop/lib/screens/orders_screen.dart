@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/orders.dart' show Orders;
+import '../providers/address.dart';
 
 import '../widgets/order_item.dart';
 import '../widgets/app_drawer.dart';
+import '../widgets/address_item.dart';
 
 class OrdersScreen extends StatefulWidget {
   static const routeName = '/orders';
@@ -24,29 +26,54 @@ class _OrdersScreenState extends State<OrdersScreen> {
         _isLoading = false;
       });
     });
-
-    // });
+    Provider.of<Address>(context, listen: false).getAddress().then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final orderData = Provider.of<Orders>(context);
+    final addressData = Provider.of<Address>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Orders'),
       ),
       drawer: AppDrawer(),
-      body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              itemCount: orderData.orders.length,
-              itemBuilder: (ctx, index) => OrderItem(
-                orderData.orders[index],
-              ),
-            ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    itemCount: addressData.addr.length,
+                    itemBuilder: (ctx, index) => AddressItems(
+                      addressData.addr[index],
+                    ),
+                  ),
+          ),
+          Expanded(
+            flex: 3,
+            child: _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    itemCount: orderData.orders.length,
+                    itemBuilder: (ctx, index) => OrderItem(
+                      orderData.orders[index],
+                    ),
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }
