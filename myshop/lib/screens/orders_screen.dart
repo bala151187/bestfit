@@ -8,6 +8,8 @@ import '../widgets/order_item.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/address_item.dart';
 
+import '../screens/edit_address_screen.dart';
+
 class OrdersScreen extends StatefulWidget {
   static const routeName = '/orders';
 
@@ -47,17 +49,19 @@ class _OrdersScreenState extends State<OrdersScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Expanded(
-            flex: 1,
+            flex: addressData.addr.isEmpty ? 0 : 1,
             child: _isLoading
                 ? Center(
                     child: CircularProgressIndicator(),
                   )
-                : ListView.builder(
-                    itemCount: addressData.addr.length,
-                    itemBuilder: (ctx, index) => AddressItems(
-                      addressData.addr[index],
-                    ),
-                  ),
+                : addressData.addr.isEmpty
+                    ? askAddress()
+                    : ListView.builder(
+                        itemCount: addressData.addr.length,
+                        itemBuilder: (ctx, index) => AddressItems(
+                          addressData.addr[index],
+                        ),
+                      ),
           ),
           Expanded(
             flex: 3,
@@ -73,6 +77,23 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget askAddress() {
+    return ListTile(
+      leading: Icon(Icons.location_on),
+      title: Text('Add Delivery Address'),
+      subtitle: Divider(),
+      trailing: IconButton(
+        icon: Icon(
+          Icons.add,
+        ),
+        onPressed: () {
+          Navigator.of(context).pushNamed(EditAddressScreen.routeName);
+        },
+        color: Theme.of(context).primaryColor,
       ),
     );
   }

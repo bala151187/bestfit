@@ -66,7 +66,8 @@ class Auth with ChangeNotifier {
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']['message']);
       }
-      _token = responseData['idToken'];
+      // _token = responseData['idToken'];
+      _token = accessToken();
       _userId = responseData['localId'];
       _expiryDate = DateTime.now().add(
         Duration(
@@ -173,7 +174,7 @@ class Auth with ChangeNotifier {
     accessToken();
   }
 
-  void accessToken() {
+  String accessToken() {
     final accountCredentials = new ServiceAccountCredentials.fromJson({
       "type": "service_account",
       "project_id": "flutter-e767a",
@@ -205,6 +206,7 @@ class Auth with ChangeNotifier {
       notifyListeners();
       client.close();
     });
+    return _token;
   }
 
   void _autoLogout() {
