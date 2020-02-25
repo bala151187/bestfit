@@ -65,7 +65,7 @@ class ProductItem extends StatelessWidget {
                   content: Text(
                     'Added item to cart!',
                   ),
-                  duration: Duration(seconds: 2),
+                  duration: Duration(seconds: 3),
                   action: SnackBarAction(
                     label: 'UNDO',
                     onPressed: () {

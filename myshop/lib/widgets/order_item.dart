@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
+
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:math';
 
 import '../providers/orders.dart' as ord;
+import '../providers/address.dart';
 
-import '../screens/payment_status_screen.dart';
+import '../screens/order_confirmation_screen.dart';
 
 class OrderItem extends StatefulWidget {
   final ord.OrderItem order;
@@ -47,7 +48,8 @@ class _OrderItemState extends State<OrderItem> {
       'prefill': {
         'contact': '9123456789',
         'email': 'balamurugan151187@gmail.com'
-      }
+      },
+      "notes": {"shipping address": "note value"}
     };
     try {
       _razorpay.open(options);
@@ -59,11 +61,18 @@ class _OrderItemState extends State<OrderItem> {
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     // SnackBar.createAnimationController();
     Fluttertoast.showToast(msg: "SUCCESS: " + response.paymentId).then((value) {
+      _paymentStatus = true;
+      Provider.of<ord.Orders>(context, listen: false)
+          .updateOrder(widget.order.id, _paymentStatus, response.paymentId);
+
+      final addressData =  Provider.of<Address>(context,listen: false);
+      Provider.of<ord.Orders>(context, listen: false)
+          .updateOrderAddress(widget.order.id, addressData.addr[0]);
+
       Navigator.of(context)
-          .pushNamed(PaymentStatusScreen.routName)
-          .then((value) {
-        _paymentStatus = true;
-      });
+          .pushNamed(OrderConfirmationScreen.routeName,
+              arguments: widget.order.id)
+          .then((value) {});
     });
   }
 
@@ -82,157 +91,127 @@ class _OrderItemState extends State<OrderItem> {
   @override
   Widget build(BuildContext context) {
     // final productId = ModalRoute.of(context).settings.arguments as String;
-    return Dismissible(
-      key: UniqueKey(),
-      background: Container(
-        color: Theme.of(context).errorColor,
-        child: Icon(
-          Icons.delete,
-          color: Colors.white,
-          size: 40,
-        ),
-        alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 20),
-        margin: EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 4,
-        ),
-      ),
-      onDismissed: (direction) {
-        Provider.of<ord.Orders>(context, listen: false).removeItem(
-          widget.order.id,
-        );
-      },
-      direction: DismissDirection.endToStart,
-      confirmDismiss: (direction) {
-        return showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text('Alert!'),
-            content: Text('Do you want to remove this order?'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('No'),
-                onPressed: () {
-                  Navigator.of(ctx).pop(false);
-                },
-              ),
-              FlatButton(
-                child: Text('Yes'),
-                onPressed: () {
-                  Navigator.of(ctx).pop(true);
-                },
-              )
-            ],
+    //final String oderId = 'Order-${DateFormat('hhmmssm').format(DateTime.now())}';
+    return Card(
+      margin: EdgeInsets.all(10),
+      child: Column(
+        children: <Widget>[
+          ListTile(
+            title: Text(
+              widget.order.orderId,
+            ),
+            leading: IconButton(
+              icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
+              onPressed: () {
+                setState(() {
+                  _expanded = !_expanded;
+                });
+              },
+            ),
+            subtitle: //Text(
+                //   DateFormat('dd/MM/yyyy hh:mm').format(widget.order.dateTime),
+                // ),
+                Text('Total: \$${widget.order.amount.toStringAsFixed(2)}'),
+            trailing: IconButton(
+              icon:
+                  Icon(!widget.order.paymentStatus ? Icons.delete : Icons.done),
+              onPressed: () {
+                return showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: Text('Alert!'),
+                    content: Text('Do you want to remove this order?'),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('No'),
+                        onPressed: () {
+                          Navigator.of(ctx).pop(false);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('Yes'),
+                        onPressed: () {
+                          Navigator.of(ctx).pop(true);
+                          Provider.of<ord.Orders>(context, listen: false)
+                              .removeItem(
+                            widget.order.id,
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                );
+              },
+              color: Theme.of(context).errorColor,
+            ),
           ),
-        );
-      },
-      child: Card(
-        margin: EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              title: Text(
-                'Order-${DateFormat('hhmmss').format(widget.order.dateTime)}',
-              ),
-              leading: IconButton(
-                icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
-                onPressed: () {
-                  setState(() {
-                    _expanded = !_expanded;
-                  });
-                },
-              ),
-              subtitle: //Text(
-                  //   DateFormat('dd/MM/yyyy hh:mm').format(widget.order.dateTime),
-                  // ),
-                  Text('Total: \$${widget.order.amount}'),
-              trailing: IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () {
-                  return showDialog(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                      title: Text('Alert!'),
-                      content: Text('Do you want to remove this order?'),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text('No'),
-                          onPressed: () {
-                            Navigator.of(ctx).pop(false);
-                          },
+          if (_expanded)
+            Container(
+              // width: 100,
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+              height: min(widget.order.products.length * 20.0 + 10, 100),
+              //height: 100,
+              child: ListView(
+                children: widget.order.products
+                    .map(
+                      (prod) => Container(
+                        width: 100,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              prod.title,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              '${prod.quantity}x \$${prod.price}',
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.grey),
+                            ),
+                            // IconButton(
+                            //   icon: Icon(Icons.delete),
+                            //   onPressed: () {},
+                            //   color: Theme.of(context).errorColor,
+                            // ),
+                          ],
                         ),
-                        FlatButton(
-                          child: Text('Yes'),
-                          onPressed: () {
-                            Navigator.of(ctx).pop(true);
-                            Provider.of<ord.Orders>(context, listen: false)
-                                .removeItem(
-                              widget.order.id,
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                  );
-                },
-                color: Theme.of(context).errorColor,
+                      ),
+                    )
+                    .toList(),
               ),
             ),
-            if (_expanded)
-              Container(
-                // width: 100,
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-                height: min(widget.order.products.length * 20.0 + 10, 100),
-                //height: 100,
-                child: ListView(
-                  children: widget.order.products
-                      .map(
-                        (prod) => Container(
-                          width: 100,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                prod.title,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                '${prod.quantity}x \$${prod.price}',
-                                style:
-                                    TextStyle(fontSize: 18, color: Colors.grey),
-                              ),
-                              // IconButton(
-                              //   icon: Icon(Icons.delete),
-                              //   onPressed: () {},
-                              //   color: Theme.of(context).errorColor,
-                              // ),
-                            ],
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
-            !_paymentStatus
-                ? FlatButton(
-                    child: Text('Make Payment'),
-                    onPressed: () {
-                      openCheckout();
-                    },
-                    textColor: Theme.of(context).primaryColor,
-                  )
-                : Container(
-                    child: Text(
-                      'Order Placed',
-                      style: TextStyle(color: Theme.of(context).primaryTextTheme.title.color),
-                    ),
-                  ),
-          ],
-        ),
+          // FutureBuilder(
+          //     future: Provider.of<ord.Orders>(context).getOrders(),
+          //     builder: (ctx,snapshot) => snapshot.connectionState == ConnectionState.waiting ? Center(child: CircularProgressIndicator()) ):
+          //  !widget.order.paymentStatus
+
+          FutureBuilder(
+              future: Provider.of<ord.Orders>(context).getOrders(),
+              builder: (ctx, snapshot) => Row(
+                    children: <Widget>[
+                      !widget.order.paymentStatus
+                          ? FlatButton(
+                              child: Text('Make Payment'),
+                              onPressed: () {
+                                openCheckout();
+                              },
+                              textColor: Theme.of(context).primaryColor,
+                            )
+                          : FlatButton(
+                              child: Text('Order Placed'),
+                              textColor: Theme.of(context).accentColor,
+                              onPressed: () {
+                                Navigator.of(context).pushNamed(
+                                    OrderConfirmationScreen.routeName,
+                                    arguments: widget.order.id);
+                              },
+                            ),
+                    ],
+                  ))
+        ],
       ),
     );
   }

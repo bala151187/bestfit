@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 import '../providers/auth.dart';
 import '../models/http_exception.dart';
@@ -96,6 +97,8 @@ class AuthCard extends StatefulWidget {
 
 class _AuthCardState extends State<AuthCard> {
   final GlobalKey<FormState> _formKey = GlobalKey();
+  bool _autoValidate = false;
+
   AuthMode _authMode = AuthMode.Login;
   Map<String, String> _authData = {
     'email': '',
@@ -108,24 +111,30 @@ class _AuthCardState extends State<AuthCard> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-            title: Text('An Error Occurred!'),
-            content: Text(message),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Okay'),
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                },
-              )
-            ],
-          ),
+        title: Text('An Error Occurred!'),
+        content: Text(message),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          )
+        ],
+      ),
     );
   }
 
   Future<void> _submit() async {
+    
     if (!_formKey.currentState.validate()) {
       // Invalid!
       return;
+    }else {
+      // start auto validate
+      setState(() {
+        _autoValidate = true;
+      });
     }
     _formKey.currentState.save();
     setState(() {
@@ -182,6 +191,19 @@ class _AuthCardState extends State<AuthCard> {
     }
   }
 
+  Future<void> _sso() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    final test = Provider.of<Auth>(context, listen: false).handleSignIn();
+    setState(() {
+      _isLoading = false;
+    });
+
+    return test;
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -191,13 +213,14 @@ class _AuthCardState extends State<AuthCard> {
       ),
       elevation: 8.0,
       child: Container(
-        height: _authMode == AuthMode.Signup ? 320 : 260,
+        height: _authMode == AuthMode.Signup ? 320 : 330,
         constraints:
-            BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
+            BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 120 : 260),
         width: deviceSize.width * 0.75,
         padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
+          autovalidate: _autoValidate,
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -245,26 +268,97 @@ class _AuthCardState extends State<AuthCard> {
                 if (_isLoading)
                   CircularProgressIndicator()
                 else
-                  RaisedButton(
-                    child:
-                        Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
-                    onPressed: _submit,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                    color: Theme.of(context).primaryColor,
-                    textColor: Theme.of(context).primaryTextTheme.button.color,
+                  Row(
+                    children: <Widget>[
+                      RaisedButton(
+                        child: Text(
+                            _authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
+                        onPressed: _submit,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 24.0, vertical: 8.0),
+                        color: Theme.of(context).primaryColor,
+                        textColor:
+                            Theme.of(context).primaryTextTheme.button.color,
+                      ),
+                      FlatButton(
+                        child: Text(
+                            '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
+                        onPressed: _switchAuthMode,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        textColor: Theme.of(context).primaryColor,
+                      ),
+                    ],
                   ),
-                FlatButton(
-                  child: Text(
-                      '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
-                  onPressed: _switchAuthMode,
-                  padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  textColor: Theme.of(context).primaryColor,
-                ),
+                if (_authMode == AuthMode.Login)
+                  Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Text(
+                        "--------- OR ---------",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Text(
+                        "Login in with",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      // Container(height: 60.0,width: 60.0, decoration: BoxDecoration(
+                      //   shape: BoxShape.rectangle,
+                      // //  color: Theme.of(context).primaryColor,
+                      // //   boxShadow: [
+                      // //     BoxShadow(
+                      // //       color: Colors.black26,
+                      // //       offset: Offset(0, 2),
+                      // //       blurRadius: 6.0,
+                      // //     ),
+                      // //   ],
+                      //   image: DecorationImage(
+                      //     image: AssetImage('assets/logos/google.jpg')
+                      //   )
+
+                      // ),),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          SignInButton(
+                            Buttons.Facebook,
+                            mini: true,
+                            onPressed: () {
+                              _sso();
+                            },
+                          ),
+                          SignInButton(
+                            Buttons.Twitter,
+                            mini: true,
+                            onPressed: () {
+                              _sso();
+                            },
+                          ),
+                          SignInButton(
+                            Buttons.LinkedIn,
+                            mini: true,
+                            onPressed: () {
+                              _sso();
+                            },
+                          )
+                        ],
+                      )
+                    ],
+                  )
               ],
             ),
           ),
