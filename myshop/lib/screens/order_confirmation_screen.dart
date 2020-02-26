@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_mailer/flutter_mailer.dart';
 
 import '../providers/orders.dart';
 import '../providers/address.dart';
@@ -26,8 +27,30 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
     super.didChangeDependencies();
   }
 
+  void emailCall() async {
+    final MailOptions mailOptions = MailOptions(
+      body: 'a long body for the email <br> with a subset of HTML',
+      subject: 'the Email Subject',
+      isHTML: true,
+      bccRecipients: ['other@example.com'],
+      ccRecipients: ['third@example.com'],
+      recipients: ['${_orderDetails.address.emailId}'],
+    );
+    // final Email email = Email(
+    //   body: 'JK order ',
+    //   subject: 'JK order ',
+    //   recipients: ['balamurugan151187@gmail.com'],
+    //   // cc: ['cc@example.com'],
+    //   // bcc: ['bcc@example.com'],
+    //   // attachmentPath: '/path/to/attachment.zip',
+    //   isHTML: false,
+    // );
+    await FlutterMailer.send(mailOptions);
+  }
+
   @override
   Widget build(BuildContext context) {
+    //emailCall();
     return Scaffold(
         appBar: AppBar(
           title: Text('Your Cart'),
@@ -73,11 +96,11 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                   child: ListView(
                     children: <Widget>[
                       // Text(_orderDetails.address.addressLine1),
-                       Text(_orderDetails.address.addressLine1),
-                       Text(_orderDetails.address.addressLine2),
-                        Text(_orderDetails.address.city),
-                         Text(_orderDetails.address.state),
-                         Text(_orderDetails.address.phoneNumber.toString()),
+                      Text(_orderDetails.address.addressLine1),
+                      Text(_orderDetails.address.addressLine2),
+                      Text(_orderDetails.address.city),
+                      Text(_orderDetails.address.state),
+                      Text(_orderDetails.address.phoneNumber.toString()),
                     ],
                   ),
                 ),

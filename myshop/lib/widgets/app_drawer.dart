@@ -7,17 +7,18 @@ import '../screens/orders_screen.dart';
 import '../screens/user_products_screen.dart';
 
 class AppDrawer extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
+    final authData = Provider.of<Auth>(context);
     return Drawer(
       child: Column(
         children: <Widget>[
           AppBar(
             title: CircleAvatar(
-              // child: Image.network(
-              //   authData.userPicture,
-              //   fit: BoxFit.cover,
-              // ),
+               child: Text(
+                 authData.userId.substring(0),
+               ),
             ),
             automaticallyImplyLeading: false,
           ),
@@ -52,6 +53,7 @@ class AppDrawer extends StatelessWidget {
             title: Text('Logout'),
             onTap: () {
               Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed('/');
               Provider.of<Auth>(context, listen: false).logout();
             },
           )
