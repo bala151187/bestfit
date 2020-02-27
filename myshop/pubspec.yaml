@@ -27,6 +27,7 @@ dependencies:
   shared_preferences: ^0.5.6+1
   flutter_signin_button: ^1.0.0
   flutter_facebook_login: ^3.0.0
+  flutter_mailer: ^0.4.1+1
   # firebase_auth: ^0.15.4
   googleapis_auth: ^0.2.11+1
   # google_sign_in: ^4.1.1
