@@ -65,6 +65,7 @@ class _CartScreenState extends State<CartScreen> {
               itemBuilder: (ctx, index) => CartItem(
                 cart.items.values.toList()[index].id,
                 cart.items.keys.toList()[index],
+                cart.items.values.toList()[index].weight,
                 cart.items.values.toList()[index].price,
                 cart.items.values.toList()[index].quantity,
                 cart.items.values.toList()[index].title,

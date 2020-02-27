@@ -33,6 +33,7 @@ class ProductItem extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
+        header: Text(product.weight),
         footer: GridTileBar(
           backgroundColor: Colors.black87,
           leading: Consumer<Product>(
@@ -58,7 +59,7 @@ class ProductItem extends StatelessWidget {
               Icons.shopping_cart,
             ),
             onPressed: () {
-              cart.addItem(product.id, product.price, product.title);
+              cart.addItem(product.id, product.price, product.title, product.weight);
               Scaffold.of(context).hideCurrentSnackBar();
               Scaffold.of(context).showSnackBar(
                 SnackBar(

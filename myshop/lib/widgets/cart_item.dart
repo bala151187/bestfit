@@ -6,6 +6,7 @@ import '../providers/cart.dart';
 class CartItem extends StatefulWidget {
   final String id;
   final String productId;
+  final String weight;
   final double price;
   final String title;
   final int quantity;
@@ -13,6 +14,7 @@ class CartItem extends StatefulWidget {
   CartItem(
     this.id,
     this.productId,
+    this.weight,
     this.price,
     this.quantity,
     this.title,
@@ -84,7 +86,11 @@ class _CartItemState extends State<CartItem> {
             ),
             title: Padding(
               padding: EdgeInsets.all(5),
-              child: Text(widget.title),
+              child: Row(children: <Widget>[
+                Text(widget.title),
+                Text(widget.weight),
+              ],),
+              // child: Text(widget.title),
             ),
             subtitle: Text(
               'Total: \$${(widget.price * _itemCount).toStringAsFixed(2)}',

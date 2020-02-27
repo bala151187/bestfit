@@ -85,7 +85,9 @@ class ProductsProvider with ChangeNotifier {
         loadedProducts.add(Product(
           id: prodId,
           title: prodData['title'],
+          weight: prodData['weight'],
           description: prodData['description'],
+          type: prodData['type'],
           price: prodData['price'],
           isFavorite: favoriteData == null ? false : favoriteData[prodId] ?? false,
           imageUrl: prodData['imageUrl'],
@@ -105,7 +107,9 @@ class ProductsProvider with ChangeNotifier {
         url,
         body: json.encode({
           'title': product.title,
+          'weight': product.weight,
           'description': product.description,
+          'type': product.type,
           'imageUrl': product.imageUrl,
           'price': product.price,
         }),
@@ -153,7 +157,9 @@ class ProductsProvider with ChangeNotifier {
         body: json.encode(
           {
             'title': newProduct.title,
+            'weight': newProduct.weight,
             'description': newProduct.description,
+            'type': newProduct.type,
             'imageUrl': newProduct.imageUrl,
             'price': newProduct.price
           },

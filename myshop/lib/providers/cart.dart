@@ -3,12 +3,14 @@ import 'package:flutter/foundation.dart';
 class CartItem {
   final String id;
   final String title;
+  final String weight;
   final int quantity;
   final double price;
 
   CartItem({
     @required this.id,
     @required this.title,
+    this.weight,
     @required this.quantity,
     @required this.price,
   });
@@ -46,6 +48,7 @@ class Cart with ChangeNotifier {
           (existingItem) => CartItem(
                 id: existingItem.id,
                 title: existingItem.title,
+                weight: existingItem.weight,
                 price: existingItem.price,
                 quantity: existingItem.quantity + 1,
               ));
@@ -56,6 +59,7 @@ class Cart with ChangeNotifier {
           (existingItem) => CartItem(
                 id: existingItem.id,
                 title: existingItem.title,
+                weight: existingItem.weight,
                 price: existingItem.price,
                 quantity: existingItem.quantity - 1,
               ));
@@ -63,13 +67,14 @@ class Cart with ChangeNotifier {
     }
   }
 
-  void addItem(String productId, double price, String title) {
+  void addItem(String productId, double price, String title, String weight) {
     if (_items.containsKey(productId)) {
       _items.update(
           productId,
           (existingItem) => CartItem(
                 id: existingItem.id,
                 title: existingItem.title,
+                weight: existingItem.weight,
                 price: existingItem.price,
                 quantity: existingItem.quantity,
               ));
@@ -79,6 +84,7 @@ class Cart with ChangeNotifier {
           () => CartItem(
                 id: DateTime.now().toString(),
                 title: title,
+                weight: weight,
                 price: price,
                 quantity: 1,
               ));
@@ -103,6 +109,7 @@ class Cart with ChangeNotifier {
           (existingCartItem) => CartItem(
                 id: existingCartItem.id,
                 title: existingCartItem.title,
+                weight: existingCartItem.weight,
                 price: existingCartItem.price,
                 quantity: existingCartItem.quantity - 1,
               ));
