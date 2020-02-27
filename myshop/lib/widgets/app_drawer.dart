@@ -7,7 +7,6 @@ import '../screens/orders_screen.dart';
 import '../screens/user_products_screen.dart';
 
 class AppDrawer extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     final authData = Provider.of<Auth>(context);
@@ -16,9 +15,9 @@ class AppDrawer extends StatelessWidget {
         children: <Widget>[
           AppBar(
             title: CircleAvatar(
-               child: Text(
-                 authData.userId.substring(0),
-               ),
+              child: Text(
+                authData.userId.substring(0),
+              ),
             ),
             automaticallyImplyLeading: false,
           ),
@@ -37,6 +36,28 @@ class AppDrawer extends StatelessWidget {
               Navigator.of(context)
                   .pushReplacementNamed(OrdersScreen.routeName);
             },
+          ),
+          Divider(),
+          ExpansionTile(
+            leading: Icon(Icons.category),
+            title: Text("Category"),
+            children: <Widget>[
+              Divider(),
+              ListTile(
+                title: Text('Oil'),
+                onTap: () {
+                  Navigator.of(context)
+                      .pushReplacementNamed('/', arguments: "Oil");
+                },
+              ),
+              Divider(),
+              ListTile(
+                title: Text('Rice'),
+                onTap: () {
+                  Navigator.of(context).pushReplacementNamed('/',arguments: "Rice");
+                },
+              ),
+            ],
           ),
           Divider(),
           ListTile(

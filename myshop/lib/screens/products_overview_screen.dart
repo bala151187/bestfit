@@ -9,7 +9,6 @@ import '../providers/cart.dart';
 import '../providers/products_provider.dart';
 import '../providers/auth.dart';
 
-
 import '../screens/cart_screen.dart';
 
 enum filterOptions {
@@ -37,17 +36,28 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   void didChangeDependencies() {
     if (_isInit) {
       _isLoading = true;
-      Provider.of<ProductsProvider>(context).getProducts().then((_) {
+      final productFilter = ModalRoute.of(context).settings.arguments as String;
+      print(productFilter);
+      if (productFilter != null) {
+         Provider.of<ProductsProvider>(context).getProducts(productFilter).then((_) {
         setState(() {
           _isLoading = false;
         });
       });
+      } else {
+        Provider.of<ProductsProvider>(context).getProducts().then((_) {
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      }
     }
     _isInit = false;
     super.didChangeDependencies();
   }
 
   var _showOnlyFavorites = false;
+
   @override
   Widget build(BuildContext context) {
     final authData = Provider.of<Auth>(context, listen: false);

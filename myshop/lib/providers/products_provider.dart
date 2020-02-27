@@ -59,11 +59,20 @@ class ProductsProvider with ChangeNotifier {
   }
 
 
-  Future<void> getProducts() async {
-    var url = 'https://flutter-e767a.firebaseio.com/products.json?access_token=$authToken';
+  Future<void> getProducts([String filter='']) async {
+    var url;
+    if (filter ==''){
+    url = 'https://flutter-e767a.firebaseio.com/products.json?access_token=$authToken';
+    }
+    else {
+      url = 'https://flutter-e767a.firebaseio.com/products.json?access_token=$authToken&orderBy="type"&equalTo="$filter"';
+    }
+    
     try {
       final response = await http.get(url);
+      print(response);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      print(extractedData);
       final List<Product> loadedProducts = [];
       if(extractedData == null){
         return;
