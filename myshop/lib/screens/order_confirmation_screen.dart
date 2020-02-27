@@ -61,8 +61,14 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
             children: <Widget>[
               ListTile(
                 leading: Icon(Icons.done),
-                title: Text('Order Details', style: TextStyle(fontSize: 20)),
-                // subtitle: Divider(),
+                title: Text(
+                  'Order Details',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                subtitle: Divider(),
                 // trailing: Icon(Icons.done),
               ),
               FutureBuilder(
@@ -72,8 +78,18 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                   height: 100,
                   child: ListView(
                     children: <Widget>[
-                      Text('Order number : ${_orderDetails.orderId}'),
-                      Text('Payment Status : ${_orderDetails.paymentId}'),
+                      Text(
+                        'Order number : ${_orderDetails.orderId}',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        'Payment Status : ${_orderDetails.paymentId}',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -85,9 +101,14 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
               children: <Widget>[
                 ListTile(
                   leading: Icon(Icons.done),
-                  title:
-                      Text('Delivery Address', style: TextStyle(fontSize: 20)),
-                  // subtitle: Divider(),
+                  title: Text(
+                    'Delivery Address',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  subtitle: Divider(),
                   // trailing: Icon(Icons.done),
                 ),
                 Container(
@@ -96,11 +117,36 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                   child: ListView(
                     children: <Widget>[
                       // Text(_orderDetails.address.addressLine1),
-                      Text(_orderDetails.address.addressLine1),
-                      Text(_orderDetails.address.addressLine2),
-                      Text(_orderDetails.address.city),
-                      Text(_orderDetails.address.state),
-                      Text(_orderDetails.address.phoneNumber.toString()),
+                      Text(
+                        _orderDetails.address.addressLine1,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        _orderDetails.address.addressLine2,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        _orderDetails.address.city,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        _orderDetails.address.state,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      Text(
+                        _orderDetails.address.phoneNumber.toString(),
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -112,9 +158,14 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
               children: <Widget>[
                 ListTile(
                   leading: Icon(Icons.done),
-                  title:
-                      Text('Delivery Timings', style: TextStyle(fontSize: 20)),
-                  // subtitle: Divider(),
+                  title: Text(
+                    'Delivery Timings',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  subtitle: Divider(),
                   // trailing: Icon(Icons.done),
                 ),
                 Container(
@@ -122,7 +173,12 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                   height: 100,
                   child: ListView(
                     children: <Widget>[
-                      Text('Product will be delivered in 4 - 5 days'),
+                      Text(
+                        'Product will be delivered in 4 - 5 days',
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
                     ],
                   ),
                 ),

@@ -16,11 +16,10 @@ class AddressItems extends StatefulWidget {
 class _AddressItemsState extends State<AddressItems> {
   var _expanded = false;
 
-
   @override
   Widget build(BuildContext context) {
     // print(this.widget.address);
-   // emailCall();
+    // emailCall();
     return Card(
       margin: EdgeInsets.all(10),
       child: Column(
@@ -42,18 +41,54 @@ class _AddressItemsState extends State<AddressItems> {
           ),
           // if (_expanded)
           FutureBuilder(
-            future: Provider.of<Address>(context,listen: false).getAddress(),
+            future: Provider.of<Address>(context, listen: false).getAddress(),
             builder: (ctx, snapshot) => Container(
               margin: EdgeInsets.symmetric(horizontal: 8, vertical: 1),
               height: 100,
               child: ListView(
                 children: <Widget>[
-                  Text('Line1: ${widget.address.addressLine1}'),
-                  Text('Line2: ${widget.address.addressLine2}'),
-                  Text('City: ${widget.address.city}'),
-                  Text('State: ${widget.address.state}'),
-                  Text('PhoneNumber: ${widget.address.phoneNumber}'),
-                  Text('EmailID: ${widget.address.emailId}'),
+                  Text(
+                    'AddressLine1: ${widget.address.addressLine1}',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  Text(
+                    'AddressLine2: ${widget.address.addressLine2}',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  Text(
+                    'City: ${widget.address.city}',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  Text(
+                    'State: ${widget.address.state}',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  Text(
+                    'PhoneNumber: ${widget.address.phoneNumber}',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  Text(
+                    'EmailID: ${widget.address.emailId}',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
                 ],
               ),
             ),
