@@ -16,7 +16,7 @@ class AppDrawer extends StatelessWidget {
           AppBar(
             title: CircleAvatar(
               child: Text(
-                authData.userId.substring(0),
+              "Hello",
               ),
             ),
             automaticallyImplyLeading: false,
