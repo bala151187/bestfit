@@ -88,6 +88,7 @@ class _CartItemState extends State<CartItem> {
               padding: EdgeInsets.all(5),
               child: Row(children: <Widget>[
                 Text(widget.title),
+                Text('-'),
                 Text(widget.weight),
               ],),
               // child: Text(widget.title),
