@@ -61,6 +61,7 @@ class Orders with ChangeNotifier {
                     'id': cp.id,
                     'title': cp.title,
                     'quantity': cp.quantity,
+                    'weight': cp.weight,
                     'price': cp.price
                   })
               .toList(),
@@ -111,6 +112,7 @@ class Orders with ChangeNotifier {
                   id: item['id'],
                   price: item['price'],
                   quantity: item['quantity'],
+                  weight: item['weight'],
                   title: item['title'],
                 ),
               )

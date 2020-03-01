@@ -33,25 +33,35 @@ class ProductItem extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        header: Text(product.weight),
+        header: GridTileBar(
+          backgroundColor: Colors.black87,
+          title: Text(
+            product.title,
+            style: TextStyle(color: Colors.white),
+          ),
+          trailing: Text(
+            product.weight,
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
         footer: GridTileBar(
           backgroundColor: Colors.black87,
           leading: Consumer<Product>(
             builder: (ctx, product, _) => IconButton(
-                  icon: Icon(
-                    product.isFavorite ? Icons.favorite : Icons.favorite_border,
-                  ),
-                  color: Theme.of(context).accentColor,
-                  onPressed: () {
-                    product.toggleFavoriteStatus(
-                      authData.token,
-                      authData.userId,
-                    );
-                  },
-                ),
+              icon: Icon(
+                product.isFavorite ? Icons.favorite : Icons.favorite_border,
+              ),
+              color: Theme.of(context).accentColor,
+              onPressed: () {
+                product.toggleFavoriteStatus(
+                  authData.token,
+                  authData.userId,
+                );
+              },
+            ),
           ),
           title: Text(
-            product.title,
+            "\$${product.price.toString()}",
             textAlign: TextAlign.center,
           ),
           trailing: IconButton(
@@ -59,7 +69,8 @@ class ProductItem extends StatelessWidget {
               Icons.shopping_cart,
             ),
             onPressed: () {
-              cart.addItem(product.id, product.price, product.title, product.weight);
+              cart.addItem(
+                  product.id, product.price, product.title, product.weight);
               Scaffold.of(context).hideCurrentSnackBar();
               Scaffold.of(context).showSnackBar(
                 SnackBar(

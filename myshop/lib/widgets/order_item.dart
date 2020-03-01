@@ -65,7 +65,7 @@ class _OrderItemState extends State<OrderItem> {
       Provider.of<ord.Orders>(context, listen: false)
           .updateOrder(widget.order.id, _paymentStatus, response.paymentId);
 
-      final addressData =  Provider.of<Address>(context,listen: false);
+      final addressData = Provider.of<Address>(context, listen: false);
       Provider.of<ord.Orders>(context, listen: false)
           .updateOrderAddress(widget.order.id, addressData.addr[0]);
 
@@ -163,6 +163,13 @@ class _OrderItemState extends State<OrderItem> {
                               prod.title,
                               style: TextStyle(
                                 fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              prod.weight,
+                              style: TextStyle(
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
