@@ -14,6 +14,8 @@ PODS:
     - FBSDKCoreKit (~> 5.5)
     - FBSDKLoginKit (~> 5.5)
     - Flutter
+  - flutter_mailer (0.0.1):
+    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
   - razorpay-pod (1.1.4)
@@ -30,6 +32,7 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_facebook_login (from `.symlinks/plugins/flutter_facebook_login/ios`)
+  - flutter_mailer (from `.symlinks/plugins/flutter_mailer/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - razorpay_flutter (from `.symlinks/plugins/razorpay_flutter/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
@@ -47,6 +50,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_facebook_login:
     :path: ".symlinks/plugins/flutter_facebook_login/ios"
+  flutter_mailer:
+    :path: ".symlinks/plugins/flutter_mailer/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   razorpay_flutter:
@@ -63,6 +68,7 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: f1ea8026a58b52d30c9f2e6a58ca7d813619fb83
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_facebook_login: cfb5659f686b1c575ef205c6b6fd20db9679d3c4
+  flutter_mailer: 2ef5a67087bc8c6c4cefd04a178bf1ae2c94cd83
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   razorpay-pod: 592624080178be4c6121216508e7857fc245f4b8
   razorpay_flutter: 2af1a15499076b1798d81bc35e4837d467b2daac
