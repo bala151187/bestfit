@@ -5,6 +5,7 @@ import 'dart:convert';
 
 class AddressItem {
   final String id;
+  final String name;
   final String addressLine1;
   final String addressLine2;
   final String city;
@@ -14,6 +15,7 @@ class AddressItem {
 
   AddressItem({
     this.id,
+    this.name,
     this.addressLine1,
     this.addressLine2,
     this.city,
@@ -42,6 +44,7 @@ class Address with ChangeNotifier {
       url,
       body: json.encode(
         {
+          'name': address.name,
           'addressLine1': address.addressLine1,
           'addressLine2': address.addressLine2,
           'city': address.city,
@@ -54,6 +57,7 @@ class Address with ChangeNotifier {
     _address.insert(
       0,
       AddressItem(
+        name: address.name,
         addressLine1: address.addressLine1,
         addressLine2: address.addressLine2,
         city: address.city,
@@ -83,6 +87,7 @@ class Address with ChangeNotifier {
         loadedAddress.add(
           AddressItem(
             id: addressId,
+            name: addressData['name'],
             addressLine1: addressData['addressLine1'],
             addressLine2: addressData['addressLine2'],
             city: addressData['city'],
@@ -110,6 +115,7 @@ class Address with ChangeNotifier {
     await http.patch(
       url,
       body: json.encode({
+        'name': newAddress.name,
         'addressLine1': newAddress.addressLine1,
         'addressLine2': newAddress.addressLine2,
         'city': newAddress.city,

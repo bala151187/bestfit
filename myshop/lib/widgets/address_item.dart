@@ -44,9 +44,16 @@ class _AddressItemsState extends State<AddressItems> {
             future: Provider.of<Address>(context, listen: false).getAddress(),
             builder: (ctx, snapshot) => Container(
               margin: EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-              height: 100,
+              height: 110,
               child: ListView(
                 children: <Widget>[
+                    Text(
+                    'Name: ${widget.address.name}',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
                   Text(
                     'AddressLine1: ${widget.address.addressLine1}',
                     style: TextStyle(

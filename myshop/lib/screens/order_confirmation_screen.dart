@@ -14,12 +14,17 @@ class OrderConfirmationScreen extends StatefulWidget {
 }
 
 class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
+  var _isLoading = false;
   OrderItem _orderDetails;
   AddressItem _addressDetails;
   @override
   void didChangeDependencies() {
     final orderId = ModalRoute.of(context).settings.arguments as String;
-    Provider.of<Orders>(context).getOrders();
+    Provider.of<Orders>(context).getOrders().then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
     if (orderId != null) {
       _orderDetails =
           Provider.of<Orders>(context, listen: false).findById(orderId);
@@ -53,7 +58,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
     //emailCall();
     return Scaffold(
         appBar: AppBar(
-          title: Text('Your Cart'),
+          title: Text('Order Confirmation'),
         ),
         body: Column(children: <Widget>[
           Expanded(
@@ -72,86 +77,107 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                 // trailing: Icon(Icons.done),
               ),
               FutureBuilder(
-                future: Provider.of<Orders>(context, listen: false).getOrders(),
+                future: Provider.of<Orders>(context, listen: false)
+                    .getOrders()
+                    .then((_) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                }),
                 builder: (ctx, snapshot) => Container(
                   margin: EdgeInsets.symmetric(horizontal: 8, vertical: 1),
                   height: 100,
-                  child: ListView(
-                    children: <Widget>[
-                      Text(
-                        'Order number : ${_orderDetails.orderId}',
-                        style: TextStyle(
-                          fontSize: 15,
+                  child: _isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ListView(
+                          children: <Widget>[
+                            Text(
+                              'Order number : ${_orderDetails.orderId}',
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              'Payment Status : ${_orderDetails.paymentId}',
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Text(
-                        'Payment Status : ${_orderDetails.paymentId}',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ),
             ],
           )),
           Expanded(
-            child: Column(
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(Icons.done),
-                  title: Text(
-                    'Delivery Address',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                  subtitle: Divider(),
-                  // trailing: Icon(Icons.done),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-                  height: 100,
-                  child: ListView(
+            child: _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Column(
                     children: <Widget>[
-                      // Text(_orderDetails.address.addressLine1),
-                      Text(
-                        _orderDetails.address.addressLine1,
-                        style: TextStyle(
-                          fontSize: 15,
+                      ListTile(
+                        leading: Icon(Icons.done),
+                        title: Text(
+                          'Delivery Address',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Theme.of(context).primaryColor,
+                          ),
                         ),
+                        subtitle: Divider(),
+                        // trailing: Icon(Icons.done),
                       ),
-                      Text(
-                        _orderDetails.address.addressLine2,
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      Text(
-                        _orderDetails.address.city,
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      Text(
-                        _orderDetails.address.state,
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      Text(
-                        _orderDetails.address.phoneNumber.toString(),
-                        style: TextStyle(
-                          fontSize: 15,
+                      Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+                        height: 130,
+                        child: ListView(
+                          children: <Widget>[
+                            // Text(_orderDetails.address.addressLine1),
+                            Text(
+                              _orderDetails.address.name,
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              _orderDetails.address.addressLine1,
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              _orderDetails.address.addressLine2,
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              _orderDetails.address.city,
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              _orderDetails.address.state,
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              _orderDetails.address.phoneNumber.toString(),
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
           ),
           Expanded(
             child: Column(

@@ -67,12 +67,13 @@ class _OrderItemState extends State<OrderItem> {
 
       final addressData = Provider.of<Address>(context, listen: false);
       Provider.of<ord.Orders>(context, listen: false)
-          .updateOrderAddress(widget.order.id, addressData.addr[0]);
-
-      Navigator.of(context)
-          .pushNamed(OrderConfirmationScreen.routeName,
-              arguments: widget.order.id)
-          .then((value) {});
+          .updateOrderAddress(widget.order.id, addressData.addr[0])
+          .then((value) {
+        Navigator.of(context)
+            .pushNamed(OrderConfirmationScreen.routeName,
+                arguments: widget.order.id)
+            .then((value) {});
+      });
     });
   }
 

@@ -66,6 +66,7 @@ class Orders with ChangeNotifier {
                   })
               .toList(),
           'address': {
+            'name':"someName",
             'addressLine1': "test",
             'addressLine2': "test",
             'city': "test",
@@ -119,6 +120,7 @@ class Orders with ChangeNotifier {
               .toList(),
           address:  AddressItem(
               id: orderData['address']['id'],
+              name: orderData['address']['name'],
               addressLine1: orderData['address']['addressLine1'],
               addressLine2: orderData['address']['addressLine2'],
               city: orderData['address']['city'],
@@ -144,6 +146,7 @@ class Orders with ChangeNotifier {
         url,
         body: json.encode(
           {
+            'name': newAddress.name,
             'addressLine1': newAddress.addressLine1,
             'addressLine2': newAddress.addressLine2,
             'city': newAddress.city,

@@ -71,6 +71,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
     emailId: '',
   );
   var _initValues = {
+    'name':'',
     'addressLine1': '',
     'addressLine2': '',
     'city': '',
@@ -90,6 +91,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
         _editedAddress =
             Provider.of<Address>(context, listen: false).findById(addressId);
         _initValues = {
+          'name': _editedAddress.name,
           'addressLine1': _editedAddress.addressLine1,
           'addressLine2': _editedAddress.addressLine2,
           'city': _editedAddress.city,
@@ -126,6 +128,29 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                 child: ListView(
                   children: <Widget>[
                     TextFormField(
+                      initialValue: _initValues['name'],
+                      decoration: InputDecoration(labelText: 'Name'),
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please provide your name.';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _editedAddress = AddressItem(
+                          id: _editedAddress.id,
+                          name: value,
+                          addressLine1: _editedAddress.addressLine1,
+                          addressLine2: _editedAddress.addressLine2,
+                          city: _editedAddress.city,
+                          state: _editedAddress.state,
+                          phoneNumber: _editedAddress.phoneNumber,
+                          emailId: _editedAddress.emailId,
+                        );
+                      },
+                    ),
+                    TextFormField(
                       initialValue: _initValues['addressLine1'],
                       decoration: InputDecoration(labelText: 'AddressLine1'),
                       textInputAction: TextInputAction.next,
@@ -138,6 +163,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                       onSaved: (value) {
                         _editedAddress = AddressItem(
                           id: _editedAddress.id,
+                          name: _editedAddress.name,
                           addressLine1: value,
                           addressLine2: _editedAddress.addressLine2,
                           city: _editedAddress.city,
@@ -160,6 +186,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                       onSaved: (value) {
                         _editedAddress = AddressItem(
                           id: _editedAddress.id,
+                          name: _editedAddress.name,
                           addressLine1: _editedAddress.addressLine1,
                           addressLine2: value,
                           city: _editedAddress.city,
@@ -182,6 +209,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                       onSaved: (value) {
                         _editedAddress = AddressItem(
                           id: _editedAddress.id,
+                          name: _editedAddress.name,
                           addressLine1: _editedAddress.addressLine1,
                           addressLine2: _editedAddress.addressLine2,
                           city: value,
@@ -204,6 +232,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                       onSaved: (value) {
                         _editedAddress = AddressItem(
                           id: _editedAddress.id,
+                          name: _editedAddress.name,
                           addressLine1: _editedAddress.addressLine1,
                           addressLine2: _editedAddress.addressLine2,
                           city: _editedAddress.city,
@@ -226,6 +255,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                       onSaved: (value) {
                         _editedAddress = AddressItem(
                           id: _editedAddress.id,
+                          name: _editedAddress.name,
                           addressLine1: _editedAddress.addressLine1,
                           addressLine2: _editedAddress.addressLine2,
                           city: _editedAddress.city,
@@ -248,6 +278,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                       onSaved: (value) {
                         _editedAddress = AddressItem(
                             id: _editedAddress.id,
+                            name: _editedAddress.name,
                             addressLine1: _editedAddress.addressLine1,
                             addressLine2: _editedAddress.addressLine2,
                             city: _editedAddress.city,
