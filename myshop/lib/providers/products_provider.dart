@@ -43,7 +43,7 @@ class ProductsProvider with ChangeNotifier {
   final String authToken;
   final String userId;
 
-  ProductsProvider(this.authToken,this.userId,this._items);
+  ProductsProvider(this.authToken, this.userId, this._items);
 
   var _showFavoritesOnly = false;
 
@@ -58,29 +58,35 @@ class ProductsProvider with ChangeNotifier {
     return _items.where((prodItem) => prodItem.isFavorite).toList();
   }
 
+  List<Product> searchItems(String searchText) {
+    return _items
+        .where((prodItem) => prodItem.title.toLowerCase().contains(searchText))
+        .toList();
+  }
 
-  Future<void> getProducts([String filter='']) async {
+  Future<void> getProducts([String filter = '']) async {
     var url;
-    if (filter ==''){
-    url = 'https://flutter-e767a.firebaseio.com/products.json?access_token=$authToken';
+    if (filter == '') {
+      url =
+          'https://flutter-e767a.firebaseio.com/products.json?access_token=$authToken';
+    } else {
+      url =
+          'https://flutter-e767a.firebaseio.com/products.json?access_token=$authToken&orderBy="type"&equalTo="$filter"';
     }
-    else {
-      url = 'https://flutter-e767a.firebaseio.com/products.json?access_token=$authToken&orderBy="type"&equalTo="$filter"';
-    }
-    
+
     try {
       final response = await http.get(url);
       print(response);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       print(extractedData);
       final List<Product> loadedProducts = [];
-      if(extractedData == null){
+      if (extractedData == null) {
         return;
       }
-       url =
-        'https://flutter-e767a.firebaseio.com/userFavorites/$userId.json?access_token=$authToken';
+      url =
+          'https://flutter-e767a.firebaseio.com/userFavorites/$userId.json?access_token=$authToken';
       final favoriteResponse = await http.get(url);
-      final favoriteData  = json.decode(favoriteResponse.body);
+      final favoriteData = json.decode(favoriteResponse.body);
       extractedData.forEach((prodId, prodData) {
         loadedProducts.add(Product(
           id: prodId,
@@ -89,7 +95,8 @@ class ProductsProvider with ChangeNotifier {
           description: prodData['description'],
           type: prodData['type'],
           price: prodData['price'],
-          isFavorite: favoriteData == null ? false : favoriteData[prodId] ?? false,
+          isFavorite:
+              favoriteData == null ? false : favoriteData[prodId] ?? false,
           imageUrl: prodData['imageUrl'],
         ));
       });
@@ -101,7 +108,8 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> addProducts(Product product) async {
-    final url = 'https://flutter-e767a.firebaseio.com/products.json?access_token=$authToken';
+    final url =
+        'https://flutter-e767a.firebaseio.com/products.json?access_token=$authToken';
     try {
       final response = await http.post(
         url,
@@ -151,7 +159,8 @@ class ProductsProvider with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
-      final url = 'https://flutter-e767a.firebaseio.com/products/$id.json?access_token=$authToken';
+      final url =
+          'https://flutter-e767a.firebaseio.com/products/$id.json?access_token=$authToken';
       await http.patch(
         url,
         body: json.encode(
@@ -171,13 +180,14 @@ class ProductsProvider with ChangeNotifier {
   }
 
   void deleteProduct(String id) {
-    final url = 'https://flutter-e767a.firebaseio.com/products/$id.json?access_token=$authToken';
+    final url =
+        'https://flutter-e767a.firebaseio.com/products/$id.json?access_token=$authToken';
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
     notifyListeners();
     http.delete(url).then((response) {
-      if(response.statusCode >= 400){
+      if (response.statusCode >= 400) {
         throw Exception();
       }
       existingProduct = null;

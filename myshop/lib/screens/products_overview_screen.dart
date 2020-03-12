@@ -7,7 +7,7 @@ import '../widgets/app_drawer.dart';
 
 import '../providers/cart.dart';
 import '../providers/products_provider.dart';
-import '../providers/auth.dart';
+// import '../providers/auth.dart';
 
 import '../screens/cart_screen.dart';
 
@@ -24,6 +24,8 @@ class ProductOverviewScreen extends StatefulWidget {
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   var _isInit = true;
   var _isLoading = false;
+  TextEditingController _searchQueryController = TextEditingController();
+  String searchQuery = "Search";
 
   @override
   void initState() {
@@ -39,11 +41,13 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
       final productFilter = ModalRoute.of(context).settings.arguments as String;
       print(productFilter);
       if (productFilter != null) {
-         Provider.of<ProductsProvider>(context).getProducts(productFilter).then((_) {
-        setState(() {
-          _isLoading = false;
+        Provider.of<ProductsProvider>(context)
+            .getProducts(productFilter)
+            .then((_) {
+          setState(() {
+            _isLoading = false;
+          });
         });
-      });
       } else {
         Provider.of<ProductsProvider>(context).getProducts().then((_) {
           setState(() {
@@ -60,18 +64,36 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authData = Provider.of<Auth>(context, listen: false);
+   // final authData = Provider.of<Auth>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Welcome!'),
+        title: TextField(
+          decoration: InputDecoration(
+            focusColor: Theme.of(context).accentColor,
+            hintText: searchQuery,
+          ),
+          controller: _searchQueryController,
+          onChanged: (_) {
+            setState(() {
+              if (_searchQueryController.text.isNotEmpty) {
+                ProductsGrid(
+                    _showOnlyFavorites, _searchQueryController.text);
+              } else {
+                ProductsGrid(_showOnlyFavorites, "");
+              }
+            });
+          },
+        ),
         actions: <Widget>[
           PopupMenuButton(
             onSelected: (filterOptions selectedValue) {
               setState(() {
                 if (selectedValue == filterOptions.Favorites) {
                   _showOnlyFavorites = true;
+                  _searchQueryController.text = "";
                 } else {
                   _showOnlyFavorites = false;
+                  _searchQueryController.text = "";
                 }
               });
             },
@@ -110,7 +132,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : ProductsGrid(_showOnlyFavorites),
+          : ProductsGrid(_showOnlyFavorites, _searchQueryController.text),
     );
   }
 }
